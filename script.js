@@ -37,12 +37,24 @@ if (themeToggle) {
 
 // Lead capture forms: submitted to Netlify Forms (the site is hosted on
 // Netlify, which parses forms with data-netlify="true" at deploy time and
-// stores submissions server-side — no custom backend needed).
+// stores submissions server-side — no custom backend needed). If that POST
+// fails for any reason (offline, opened as a local file, network hiccup),
+// fall back to a pre-filled email so the submission still reaches us.
+const CONTACT_EMAIL = 'hello@aitrellis.sa';
+
 function encodeFormData(data) {
   return new URLSearchParams(data).toString();
 }
 
-function handleFormSubmit(form) {
+function buildMailtoFallback(subject, data, fieldNames) {
+  const lines = fieldNames
+    .map((name) => [name, data.get(name)])
+    .filter(([, value]) => value)
+    .map(([name, value]) => `${name}: ${value}`);
+  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join('\n'))}`;
+}
+
+function handleFormSubmit(form, subject, fieldNames) {
   if (!form) return;
 
   form.addEventListener('submit', (event) => {
@@ -71,14 +83,19 @@ function handleFormSubmit(form) {
         form.querySelector('.form-success').classList.add('visible');
       })
       .catch(() => {
+        const mailtoUrl = buildMailtoFallback(subject, data, fieldNames);
+        const fallbackLink = form.querySelector('.form-error a');
+        if (fallbackLink) fallbackLink.href = mailtoUrl;
+
         form.classList.add('errored');
         form.querySelector('.form-error').classList.add('visible');
+        window.location.href = mailtoUrl;
       });
   });
 }
 
-handleFormSubmit(document.getElementById('requestForm'));
-handleFormSubmit(document.getElementById('profileForm'));
+handleFormSubmit(document.getElementById('requestForm'), 'Request a place on the 2026 list', ['email']);
+handleFormSubmit(document.getElementById('profileForm'), 'Company profile request', ['name', 'email', 'company', 'role', 'phone']);
 
 // Footer copyright year
 const yearEl = document.getElementById('year');
