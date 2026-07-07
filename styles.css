@@ -372,16 +372,28 @@ input::placeholder {
   line-height: 1.6;
 }
 
-.form-success a {
+.form-success a,
+.form-error a {
   text-decoration: underline;
 }
 
-.form-success.visible {
+.form-success.visible,
+.form-error.visible {
   display: block;
 }
 
+.form-error {
+  display: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #c0392b;
+  padding: 16px 0;
+  line-height: 1.6;
+}
+
 form.submitted .form-fields,
-form.submitted .form-note {
+form.submitted .form-note,
+form.errored .form-fields {
   display: none;
 }
 
@@ -590,6 +602,10 @@ form.submitted .form-note {
 
 .cta-section .form-success {
   color: #fff;
+}
+
+.cta-section .form-error {
+  color: #ffd7d0;
 }
 
 /* ---------- Footer ---------- */

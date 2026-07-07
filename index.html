@@ -58,7 +58,8 @@
         </p>
 
         <p class="form-label">Request a place on the 2026 list</p>
-        <form class="hero-form" id="requestForm" novalidate>
+        <form class="hero-form" id="requestForm" name="request" method="POST" data-netlify="true" netlify-honeypot="company_website" novalidate>
+          <input type="hidden" name="form-name" value="request">
           <div class="honeypot" aria-hidden="true">
             <label>Leave this field empty
               <input type="text" name="company_website" tabindex="-1" autocomplete="off">
@@ -71,7 +72,8 @@
             </div>
           </div>
           <p class="form-note">We read every request. When a place opens that fits, we reach out. No newsletters.</p>
-          <p class="form-success">Opening your email app with a message to hello@aitrellis.sa — hit send there to complete your request. Didn't open? <a href="mailto:hello@aitrellis.sa">Email us directly</a>.</p>
+          <p class="form-success">Thank you. We've received your request and will reach out if a place opens that fits.</p>
+          <p class="form-error">Something went wrong sending that. Please <a href="mailto:hello@aitrellis.sa">email us directly</a> instead.</p>
         </form>
 
         <div class="hero-actions-row">
@@ -180,7 +182,8 @@
         <h2>Who we are, how it works, and what we've delivered.</h2>
         <p class="section-lead">Tell us where to send it.</p>
 
-        <form class="profile-form" id="profileForm" novalidate>
+        <form class="profile-form" id="profileForm" name="profile" method="POST" data-netlify="true" netlify-honeypot="company_website" novalidate>
+          <input type="hidden" name="form-name" value="profile">
           <div class="honeypot" aria-hidden="true">
             <label>Leave this field empty
               <input type="text" name="company_website" tabindex="-1" autocomplete="off">
@@ -212,7 +215,8 @@
             <button type="submit" class="btn btn-primary">Send me the profile</button>
           </div>
           <p class="form-note" style="margin-top: 20px;">We use your details to send the profile and follow up once. No newsletters.</p>
-          <p class="form-success">Opening your email app with a message to hello@aitrellis.sa — hit send there to complete your request. Didn't open? <a href="mailto:hello@aitrellis.sa">Email us directly</a>.</p>
+          <p class="form-success">Thank you. Your company profile request is in — we'll send it to your email shortly.</p>
+          <p class="form-error">Something went wrong sending that. Please <a href="mailto:hello@aitrellis.sa">email us directly</a> instead.</p>
         </form>
       </div>
     </section>

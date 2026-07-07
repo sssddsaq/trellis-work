@@ -35,16 +35,14 @@ if (themeToggle) {
   });
 }
 
-// Lead capture forms: this is a static site with no backend, so "submitting"
-// means handing the details to the visitor's own email client via mailto.
-const CONTACT_EMAIL = 'hello@aitrellis.sa';
-
-function buildMailtoUrl(subject, lines) {
-  const body = lines.filter(Boolean).join('\n');
-  return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+// Lead capture forms: submitted to Netlify Forms (the site is hosted on
+// Netlify, which parses forms with data-netlify="true" at deploy time and
+// stores submissions server-side — no custom backend needed).
+function encodeFormData(data) {
+  return new URLSearchParams(data).toString();
 }
 
-function handleFormSubmit(form, buildMailto) {
+function handleFormSubmit(form) {
   if (!form) return;
 
   form.addEventListener('submit', (event) => {
@@ -60,32 +58,27 @@ function handleFormSubmit(form, buildMailto) {
       return;
     }
 
-    const mailtoUrl = buildMailto(new FormData(form));
-    const successLink = form.querySelector('.form-success a');
-    if (successLink) successLink.href = mailtoUrl;
+    const data = new FormData(form);
 
-    form.classList.add('submitted');
-    form.querySelector('.form-success').classList.add('visible');
-
-    window.location.href = mailtoUrl;
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encodeFormData(data),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error(`Form submission failed: ${response.status}`);
+        form.classList.add('submitted');
+        form.querySelector('.form-success').classList.add('visible');
+      })
+      .catch(() => {
+        form.classList.add('errored');
+        form.querySelector('.form-error').classList.add('visible');
+      });
   });
 }
 
-handleFormSubmit(document.getElementById('requestForm'), (data) => buildMailtoUrl(
-  'Request a place on the 2026 list',
-  [`Work email: ${data.get('email')}`]
-));
-
-handleFormSubmit(document.getElementById('profileForm'), (data) => buildMailtoUrl(
-  'Company profile request',
-  [
-    `Full name: ${data.get('name')}`,
-    `Work email: ${data.get('email')}`,
-    `Company: ${data.get('company')}`,
-    data.get('role') ? `Role: ${data.get('role')}` : '',
-    data.get('phone') ? `Phone: ${data.get('phone')}` : '',
-  ]
-));
+handleFormSubmit(document.getElementById('requestForm'));
+handleFormSubmit(document.getElementById('profileForm'));
 
 // Footer copyright year
 const yearEl = document.getElementById('year');
