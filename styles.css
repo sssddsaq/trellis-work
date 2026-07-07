@@ -140,6 +140,10 @@ img {
   color: var(--ink);
 }
 
+.nav-cta {
+  display: none;
+}
+
 .header-inner .btn {
   flex-shrink: 0;
 }
@@ -213,6 +217,7 @@ img {
 /* ---------- Sections ---------- */
 .section {
   padding: 100px 0;
+  scroll-margin-top: 96px;
 }
 
 .section-alt {
@@ -359,6 +364,7 @@ img {
   background: var(--paper-alt);
   border-top: 1px solid var(--border);
   padding-top: 64px;
+  scroll-margin-top: 76px;
 }
 
 .footer-inner {
@@ -452,8 +458,13 @@ img {
     pointer-events: auto;
   }
 
-  .header-inner .btn-small {
+  .header-cta {
     display: none;
+  }
+
+  .nav-cta {
+    display: inline-block;
+    margin-top: 4px;
   }
 
   .section {
