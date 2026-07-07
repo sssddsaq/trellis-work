@@ -365,10 +365,15 @@ input::placeholder {
 
 .form-success {
   display: none;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--accent-dark);
   padding: 16px 0;
+  line-height: 1.6;
+}
+
+.form-success a {
+  text-decoration: underline;
 }
 
 .form-success.visible {
